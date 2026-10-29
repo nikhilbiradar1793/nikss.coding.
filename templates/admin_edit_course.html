@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ course.title }} | NIKSS Admin{% endblock %}
+{% block content %}
+<style>
+    .current-poster{display:flex;align-items:center;gap:16px;margin-bottom:18px;padding:16px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.035)}
+    .current-poster img{width:150px;height:90px;object-fit:cover;border-radius:13px;border:1px solid rgba(255,255,255,.10)}
+    .poster-change{padding:20px;border:1px dashed rgba(139,92,246,.42);border-radius:18px;background:rgba(139,92,246,.045)}
+    .new-poster-preview{display:none;margin-top:16px;max-width:360px;overflow:hidden;border-radius:18px}
+    .new-poster-preview img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+</style>
+
+<section class="admin-form-head">
+    <a class="back" href="{{ url_for('admin_dashboard') }}">← Admin Dashboard</a>
+    <div class="eyebrow">COURSE STUDIO</div>
+    <h1>Edit <em>{{ course.title }}.</em></h1>
+    <p>Update course information or replace the active course poster.</p>
+</section>
+
+<section class="form-card wide">
+    <form method="POST" action="{{ url_for('admin_edit_course', course_id=course.id) }}" class="form grid-form" enctype="multipart/form-data">
+        <label>Course Title<input name="title" value="{{ course.title }}" required></label>
+        <label>Price (INR)<input name="price" type="number" min="0" step="1" value="{{ course.price or 0 }}"></label>
+        <label class="span2">Description<textarea name="description" rows="5" required>{{ course.description }}</textarea></label>
+
+        <div class="span2">
+            <small style="display:block;margin-bottom:8px;">Current Active Poster</small>
+            {% if course.image %}
+            <div class="current-poster">
+                <img src="{{ get_uploaded_image_url(course.image) }}" alt="{{ course.title }} poster">
+                <div><strong>{{ course.title }}</strong><small style="display:block;margin-top:5px;">This poster stays active until you save a replacement.</small></div>
+            </div>
+            {% else %}
+            <div class="current-poster"><div><strong>No custom poster uploaded</strong><small style="display:block;margin-top:5px;">Upload a poster below to give this course a custom image.</small></div></div>
+            {% endif %}
+        </div>
+
+        <label class="span2 poster-change">
+            Replace Course Poster
+            <input id="posterInput" name="poster_image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+            <small>Leave empty to keep the current poster unchanged. Select a new image only when you want to replace it.</small>
+            <div class="new-poster-preview" id="newPosterPreview"><img id="newPosterPreviewImage" alt="New poster preview"></div>
+        </label>
+
+        <label>Level<select name="level">
+            <option {% if course.level == "Beginner" %}selected{% endif %}>Beginner</option>
+            <option {% if course.level == "Intermediate" %}selected{% endif %}>Intermediate</option>
+            <option {% if course.level == "Advanced" %}selected{% endif %}>Advanced</option>
+        </select></label>
+        <label>Duration<input name="duration" value="{{ course.duration or '8 Weeks' }}"></label>
+        <div class="form-submit span2"><button class="btn primary" type="submit">Save Course Changes →</button></div>
+    </form>
+</section>
+
+<script>
+    (function(){
+        const input=document.getElementById("posterInput"),box=document.getElementById("newPosterPreview"),image=document.getElementById("newPosterPreviewImage");
+        input.addEventListener("change",function(){
+            const file=input.files&&input.files[0];
+            if(!file){box.style.display="none";return;}
+            if(!file.type.startsWith("image/")){input.value="";box.style.display="none";alert("Please select a valid image file.");return;}
+            const reader=new FileReader();
+            reader.onload=e=>{image.src=e.target.result;box.style.display="block"};
+            reader.readAsDataURL(file);
+        });
+    })();
+</script>
+{% endblock %}

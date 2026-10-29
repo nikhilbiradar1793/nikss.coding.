@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }} | NIKSS Coding Hub{% endblock %}
+{% block content %}
+<section class="course-detail">
+ <div class="detail-cover">
+  {% if course.image %}<img src="{{ get_uploaded_image_url(course.image) }}" alt="{{ course.title }} course poster">{% endif %}
+  <div><span>{{ course.level }}</span><b>{{ course.title[:1] }}</b></div>
+ </div>
+ <div class="detail-copy">
+  <div class="eyebrow">COURSE / {{ course.level|upper }}</div>
+  <h1>{{ course.title }}</h1>
+  <p class="lead">{{ course.description }}</p>
+  <div class="detail-stats"><div><b>◷</b><span>Duration<small>{{ course.duration }}</small></span></div><div><b>◆</b><span>Level<small>{{ course.level }}</small></span></div><div><b>✓</b><span>Format<small>Video + Projects</small></span></div></div>
+  <div class="price-box"><div><small>COURSE ACCESS</small><strong>₹{{ "%.0f"|format(course.price or 0) }}</strong></div>
+   {% if enrolled %}<a class="btn primary" href="{{ url_for('learn_course', course_id=course.id) }}">Continue Learning →</a>
+   {% elif session.get('user_id') and (course.price or 0) <= 0 %}<form method="POST" action="{{ url_for('enroll', course_id=course.id) }}"><button class="btn primary">Enroll Free →</button></form>
+   {% elif session.get('user_id') %}<button class="btn primary" onclick="startPayment({{ course.id }})">Unlock Course →</button>
+   {% else %}<a class="btn primary" href="{{ url_for('login', next=url_for('course_details', course_id=course.id)) }}">Login to Enroll →</a>{% endif %}
+  </div>
+ </div>
+</section>
+<section class="section detail-lower"><div><div class="eyebrow">WHAT YOU GET</div><h2>Learn by <em>doing.</em></h2></div><div class="benefits"><div>✓ Structured lessons</div><div>✓ Practical coding exercises</div><div>✓ Project-focused learning</div><div>✓ Course progress tracking</div><div>✓ AI Tutor support</div><div>✓ Lifetime learning access*</div></div></section>
+{% endblock %}
+{% block scripts %}
+<script>
+ async function startPayment(courseId){
+  try{
+   const r=await fetch(`/payment/create/${courseId}`,{method:"POST"});const data=await r.json();
+   if(!data.success){alert(data.message||"Unable to start payment.");return}
+   if(typeof Razorpay==="undefined"){alert("Payment gateway is not loaded.");return}
+   const options={key:data.key,amount:data.amount,currency:data.currency||"INR",name:"NIKSS Coding Hub",description:"Course Enrollment",order_id:data.order_id,handler:function(response){verifyPayment(courseId,response)},theme:{color:"#8B5CF6"}};
+   new Razorpay(options).open();
+  }catch(e){alert("Payment could not be started. Please try again.")}
+ }
+ async function verifyPayment(courseId,response){
+  const r=await fetch(`/payment/verify/${courseId}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(response)});
+  const data=await r.json();alert(data.message||"Payment complete.");
+  if(data.success&&data.redirect_url)location.href=data.redirect_url;
+ }
+</script>
+{% endblock %}

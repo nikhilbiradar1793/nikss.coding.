@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Add Course | NIKSS Admin{% endblock %}
+{% block content %}
+<style>
+    .course-poster-upload{padding:22px;border:1px dashed rgba(139,92,246,.42);border-radius:18px;background:rgba(139,92,246,.045)}
+    .poster-preview{display:none;margin-top:16px;max-width:360px;overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.10)}
+    .poster-preview img{width:100%;aspect-ratio:16/9;display:block;object-fit:cover}
+</style>
+<section class="admin-form-head">
+    <a class="back" href="{{ url_for('admin_dashboard') }}">← Admin Dashboard</a>
+    <div class="eyebrow">COURSE STUDIO</div>
+    <h1>Create a new <em>course.</em></h1>
+    <p>Create a polished course card with its own poster. The saved poster remains active until you replace it.</p>
+</section>
+
+<section class="form-card wide">
+    <form method="POST" action="{{ url_for('admin_add_course') }}" class="form grid-form" enctype="multipart/form-data">
+        <label>Course Title<input name="title" required placeholder="Python Programming"></label>
+        <label>Price (INR)<input name="price" type="number" min="0" step="1" placeholder="4999"></label>
+        <label class="span2">Description<textarea name="description" rows="5" required placeholder="Describe what students will learn..."></textarea></label>
+
+        <label class="span2 course-poster-upload">
+            Course Poster / Image
+            <input id="posterInput" name="poster_image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+            <small>Upload JPG, JPEG, PNG or WEBP. The saved poster stays with this course until an admin replaces it.</small>
+            <div class="poster-preview" id="posterPreview"><img id="posterPreviewImage" alt="Course poster preview"></div>
+        </label>
+
+        <label>Level<select name="level"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></label>
+        <label>Duration<input name="duration" value="8 Weeks"></label>
+        <div class="form-submit span2"><button class="btn primary" type="submit">Create Course →</button></div>
+    </form>
+</section>
+
+<script>
+    (function(){
+        const input=document.getElementById("posterInput"),box=document.getElementById("posterPreview"),image=document.getElementById("posterPreviewImage");
+        input.addEventListener("change",function(){
+            const file=input.files&&input.files[0];
+            if(!file){box.style.display="none";return;}
+            if(!file.type.startsWith("image/")){input.value="";box.style.display="none";alert("Please select a valid image file.");return;}
+            const reader=new FileReader();
+            reader.onload=e=>{image.src=e.target.result;box.style.display="block"};
+            reader.readAsDataURL(file);
+        });
+    })();
+</script>
+{% endblock %}

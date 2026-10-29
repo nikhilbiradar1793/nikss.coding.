@@ -1,0 +1,5 @@
+Header typography update:
+- Desktop navigation font reduced to 11px (10px on medium-width desktop screens).
+- Logo and brand name remain larger and visually dominant.
+- Mobile menu links use readable 12px text for touch-friendly navigation.
+- Only header typography and spacing were adjusted; the rest of the website is unchanged.

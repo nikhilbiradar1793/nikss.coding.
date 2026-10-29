@@ -1,0 +1,160 @@
+}
+
+.flash{
+    display:flex;
+    gap:15px;
+    justify-content:space-between;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#10182A;
+    box-shadow:var(--shadow);
+    font-size:10px;
+}
+
+.flash button{border:0;background:none;color:#9BA6BB;cursor:pointer}
+.flash.success{border-color:rgba(52,211,153,.3)}
+.flash.danger,.flash.error{border-color:rgba(251,113,133,.3)}
+.flash.warning{border-color:rgba(251,191,36,.3)}
+
+.footer{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:38px 20px 22px;
+    border-top:1px solid var(--line);
+}
+
+.footer-top{display:flex;justify-content:space-between;gap:30px}
+.footer p{font-size:10px;color:#68758D}
+.footer-nav{display:flex;gap:18px}
+.footer-nav a{font-size:9px;color:#808CA3}
+
+.footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    border-top:1px solid var(--line);
+    padding-top:17px;
+    margin-top:25px;
+    color:#5D6A81;
+    font-size:8px;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:950px){
+    .hero,.course-detail,.auth-page{grid-template-columns:1fr}
+    .hero-code{max-width:700px;margin:auto}
+    .grid-3,.about-grid{grid-template-columns:repeat(2,1fr)}
+    .feature-panel,.detail-lower,.contact-grid,.video-admin-grid{grid-template-columns:1fr}
+    .admin-layout{grid-template-columns:1fr}
+    .admin-stats{grid-template-columns:repeat(3,1fr)}
+    .learn-layout{grid-template-columns:1fr}
+    .lesson-sidebar{order:2}
+    .course-progress{width:220px}
+    .auth-story{padding-top:25px}
+}
+
+/* =========================================================
+   MOBILE
+   Hamburger menu appears ONLY below 768px.
+   Laptop / desktop keeps normal horizontal navigation.
+   ========================================================= */
+
+@media(max-width:767px){
+
+    .wrap{padding:0 15px}
+
+    .nav{
+        height:68px;
+        padding:0 15px;
+    }
+
+    .brand{gap:8px}
+
+    .brand-logo-image,.logo{
+        width:40px;
+        height:40px;
+        border-radius:12px;
+    }
+
+    .brand-name{
+        max-width:min(52vw, 190px);
+        font-size:17px;
+        letter-spacing:0;
+    }
+
+    /* Hamburger only on mobile */
+    .nav-toggle{
+        display:flex;
+        flex:0 0 auto;
+    }
+
+    /* Mobile dropdown menu */
+    .nav-links{
+        display:none;
+        position:absolute;
+        left:15px;
+        right:15px;
+        top:76px;
+        flex-direction:column;
+        align-items:stretch;
+        gap:4px;
+        padding:10px;
+        background:rgba(10,16,32,.98);
+        border:1px solid var(--line);
+        border-radius:18px;
+        box-shadow:0 25px 70px rgba(0,0,0,.45);
+        backdrop-filter:blur(20px);
+    }
+
+    .nav-links.open{
+        display:flex;
+    }
+
+    .nav-links a{
+        width:100%;
+        text-align:center;
+        font-size:14px;
+        padding:13px 12px;
+    }
+
+    .hero{padding:55px 0}
+    .hero h1,.page-hero h1{font-size:47px}
+    .hero-copy>p{font-size:13px}
+    .code-card{transform:none}
+    .float-card{display:none}
+    .section{padding:50px 0}
+    .section-head,.dash-head,.admin-head,.learn-head,.ai-head,.footer-top{flex-direction:column;align-items:flex-start}
+    .section-head h2{font-size:31px}
+    .grid-3,.about-grid,.stat-grid,.admin-stats,.benefits,.grid-form{grid-template-columns:1fr}
+    .feature-panel{padding:25px}
+    .feature-panel h2{font-size:30px}
+    .auth-story h1,.admin-head h1,.admin-form-head h1{font-size:45px}
+    .auth-page{padding:45px 0}
+    .detail-cover{height:330px}
+    .detail-copy h1{font-size:42px}
+    .detail-stats{flex-direction:column}
+    .price-box{align-items:flex-start;gap:15px;flex-direction:column}
+    .dash-head h1{font-size:36px}
+    .learning-card{flex-wrap:wrap}
+    .learning-card .btn{margin-left:62px}
+    .learn-head h1,.ai-head h1{font-size:38px}
+    .course-progress{width:100%}
+    .video-info{flex-direction:column}
+    .messages{height:430px}
+    .msg{max-width:90%}
+    .admin-table{overflow-x:auto}
+    .table-row{min-width:620px}
+    .footer-nav{flex-wrap:wrap}
+    .footer-bottom{flex-direction:column;gap:8px}
+}
+
+
+/* Final navbar responsive refinements */
+.nav{
+    width:100%;
+    box-sizing:border-box;
+}
+.brand{
